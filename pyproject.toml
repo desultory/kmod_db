@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kmod_db"
+version = "0.1.0"
+authors = [
+  { name="Desultory", email="dev@pyl.onl" },
+]
+description = "A tool for enumerating kmod info using system info"
+readme = "readme.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "zenlib >= 3.0.2",
+]
+
+[project.scripts]
+kmod_db = "kmod_db.main:main"
