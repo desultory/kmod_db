@@ -18,7 +18,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "zenlib >= 3.0.2",
+    "zenlib @ git+https://github.com/desultory/zenlib.git@main",
 ]
 
 [project.scripts]
