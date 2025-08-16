@@ -54,6 +54,7 @@ class KmodDB(KmodEnumerators):
         self.kernel_version = kernel_version or uname().release
         self.builtin = set()  # Set to store builtin modules
         self.aliases = defaultdict(list)  # Dictionary where keys are module names and values are lists of aliases
+        self.cpu = defaultdict(list)  # Dictionary where keys are module names and values are lists of CPU aliases
         self.dmi = defaultdict(list)  # Dictionary where keys are module names and values are lists of DMI aliases
         self.of = defaultdict(
             list
@@ -296,12 +297,17 @@ class KmodDB(KmodEnumerators):
         cpuinfo = self.get_alias_keys(alias)
         cpu_type = cpuinfo.pop("type")
         features = cpuinfo.pop("feature")
-        if cpu_type == "*" and features == "*":
-            self.aliases[module].append(alias)
-            self.logger.info(f"Adding generic CPU alias: {alias} for module: {module}")
-            return
-
-        arch, info = cpu_type.split(",", 1)
+        if cpu_type == "*":
+            if features == "*":
+                self.aliases[module].append(alias)
+                self.logger.info(f"Adding generic CPU alias: {alias} for module: {module}")
+                return
+            arch = "*"
+            info = "*"
+        else:
+            arch, info = cpu_type.split(",", 1)
+        match_info = {"arch": arch, "info": info, "features": features}
+        self.cpu[module].append(match_info)
 
     def _process_dmi_alias(self, alias: str, module: str) -> None:
         """Processes DMI aliases, which are used to match hardware based on DMI information."""
